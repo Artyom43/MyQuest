@@ -80,6 +80,7 @@ def ItScenario():  # Собственно, сценарий
 
     if 'Поставить кружку на стол' in WhatIDid and 'Положить тарелку в шкаф' in WhatIDid:
         text1.insert(1.0, 'Ну, все на своих местах. в теории.')
+        me.inventory.remove('Кружка')
         WhatIDid.remove('Поставить кружку на стол')
         WhatIDid.remove('Положить тарелку в шкаф')
         me.tasks.remove('Принести посуду в комнату')
@@ -257,7 +258,7 @@ def button_clicked_2():
 
     me.time -= 5
     k = 4.0
-    text2.insert(2.0, 'время: {} \n'.format(me.time))
+    text2.insert(2.0, 'оставшееся время: {} минут\n'.format(me.time))
     text2.insert(3.0, 'задачи: \n')
     for item in me.tasks:
         text2.insert(k, '           {}\n'.format(item))
