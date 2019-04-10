@@ -16,7 +16,7 @@ me = person.Person()
 tasks = 0
 
 
-def ItScenario():  # Собственно, сценарий
+def it_scenario():  # Собственно, сценарий
     global tasks
     if 'Взять ведро' in WhatIDid:
         text1.insert(1.0, 'Так, ведро есть. Но с пустым ведром полы не помоешь, так ведь?')
@@ -38,6 +38,7 @@ def ItScenario():  # Собственно, сценарий
     if 'Набрать воду в ведро' in WhatIDid and CurL == 1:
         text1.insert(1.0, 'Да что же такое, ни одной рабочей раковины в умывалке!'
                           'Придется набрать воду где-то еще.')
+        WhatIDid.remove('Набрать воду в ведро')
 
     if 'Помыть полы' in WhatIDid:
         text1.insert(1.0,'Впервые с твоего заселения в общежитие полы были вымыты.'
@@ -73,7 +74,7 @@ def ItScenario():  # Собственно, сценарий
         me.inventory.remove('Тарелка')
         me.time -= 5
 
-    if 'Поставить кружку на стол' in WhatIDid and not 'Положить тарелку в шкаф' in WhatIDid:
+    if 'Поставить кружку на стол' in WhatIDid and 'Положить тарелку в шкаф' not in WhatIDid:
         text1.insert(1.0, 'Теперь нужно не пить из нее до обхода, чтобы не испортить видимость чистоты.')
         me.inventory.remove('Кружка')
         me.time -= 5
@@ -164,7 +165,7 @@ Butt = []
 frame = []
 
 
-def ButtGenerator():
+def butt_generator():
     for frames in frame:
         frames.destroy()
     frame.clear()
@@ -174,7 +175,7 @@ def ButtGenerator():
     for it in range(len(Loc[CurL].Doings)):
         frame.append(Frame(root, bg='green', bd=2))
 
-        def ButtClick(j):
+        def butt_click(j):
             text1.delete(1.0, END)
             text2.delete(1.0, END)
             if not Loc[CurL].Doings[j] in WhatIDid:
@@ -184,7 +185,7 @@ def ButtGenerator():
             frame[j].destroy()
             j -= 1
 
-            ItScenario()
+            it_scenario()
 
             k = 4.0
             text2.insert(2.0, 'оставшееся время: {} минут\n'.format(me.time))
@@ -199,7 +200,7 @@ def ButtGenerator():
                 k += 1
             print(room.Doings, bathroom.Doings, Kitchen.Doings, WhatIDid, me.inventory)
 
-        Butt.append(Button(frame[it], text='{}'.format(Loc[CurL].Doings[it]), command=lambda j=it: ButtClick(j)))
+        Butt.append(Button(frame[it], text='{}'.format(Loc[CurL].Doings[it]), command=lambda j=it: butt_click(j)))
         frame[it].grid(row=it + 3, column=0)
         Butt[it].grid(row=it + 4, column=0)
 
@@ -208,7 +209,7 @@ def button_clicked_1():
     text1.delete('1.0', END)
     text2.delete('1.0', END)
     global CurL
-    ItScenario()
+    it_scenario()
     ii = 0
     while ii < len(Loc[CurL].Doings):
         if Loc[CurL].Doings[ii] == '':
@@ -219,7 +220,7 @@ def button_clicked_1():
     button1['text'] = 'Пойти {}'.format(Locations[(CurL + 1) % 3])
     button2['text'] = 'Пойти {}'.format(Locations[(CurL + 2) % 3])
 
-    ButtGenerator()
+    butt_generator()
     me.time -= 5
 
     text1.insert(1.0, '{}'.format(Loc[CurL].Text))
@@ -242,7 +243,7 @@ def button_clicked_2():
     text1.delete(1.0, END)
     text2.delete(1.0, END)
     global CurL
-    ItScenario()
+    it_scenario()
     ii = 0
     while ii < len(Loc[CurL].Doings):
         if Loc[CurL].Doings[ii] == '':
@@ -250,7 +251,7 @@ def button_clicked_2():
         else:
             ii += 1
     CurL = (CurL + 2) % 3
-    ButtGenerator()
+    butt_generator()
     button1['text'] = 'Пойти {}'.format(Locations[(CurL + 1) % 3])
     button2['text'] = 'Пойти {}'.format(Locations[(CurL + 2) % 3])
 
@@ -274,7 +275,7 @@ def button_clicked_2():
 
 button1 = Button(frame3, text='Пойти в умывальную комнату', command=button_clicked_1)
 button2 = Button(frame4, text='Пойти на кухню', command=button_clicked_2)
-ButtGenerator()
+butt_generator()
 
 
 frame1.grid(row=0, column=0)
